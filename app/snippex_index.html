@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta charset="utf-8">
+
+	<script id='sap-ui-bootstrap' src='https://openui5nightly.hana.ondemand.com/resources/sap-ui-core.js'
+		data-sap-ui-theme='sap_fiori_3' data-sap-ui-libs='sap.m' data-sap-ui-compatVersion='edge'></script>
+
+	<script id="myXml" type="text/xmldata">
+		<mvc:View xmlns:code="sap.ui.codeeditor" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+			xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns="sap.m" controllerName="myController"
+			displayBlock="true">
+<App>
+<Page>
+	<VBox>
+	<HBox>
+		<Label design="Bold" showColon="true" text="Configured Time Zone" class="sapUiResponsiveMargin"/>
+		<Text text="{/ConfiguredTimezone}" class="sapUiResponsiveMargin"/>
+		<Label design="Bold" showColon="true" text="Current Timestamp" class="sapUiResponsiveMargin"/>
+		<Text text="{/CurrentTimestamp}" class="sapUiResponsiveMargin"/>
+		<Link text="Documentation" href="https://sapui5.hana.ondemand.com/#/topic/6c9e61dc157a40c19460660ece8368bc"
+			target="_blank" class="sapUiResponsiveMargin"/>
+	</HBox>
+<!-- ************************************************************************************************************* -->
+	<Panel backgroundDesign="Solid" class="sapUiResponsiveMargin" expandable="true" expanded="true"
+		headerText="Dates, Times and Timestamps in OData V2 and V4" width="auto">
+		<form:SimpleForm backgroundDesign="Transparent"	columnsM="2" columnsL="2" columnsXL="2"
+				editable="true" labelSpanM="3" layout="ResponsiveGridLayout">
+			<core:Title level="H2" text="OData V2" />
+			<Label design="Bold" text="Date (Edm.DateTime with sap:display-format='Date')" />
+			<DatePicker value="{
+				constraints: {displayFormat: 'Date'},
+				path: '/V2/Date',
+				type: 'sap.ui.model.odata.type.DateTime'
+			}" showCurrentDateButton="true" />
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V2DatePicker')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Value" />
+			<Text text="{path: '/V2/Date', formatter: '.formatV2Date'}" />
+
+			<Label design="Bold" text="Time (Edm.Time)" />
+			<TimePicker value="{
+				path: '/V2/Time',
+				type: 'sap.ui.model.odata.type.Time'
+			}" showCurrentTimeButton="true" />			
+			<Label text="Model Value" />
+			<Text text="{path: '/V2/Time', formatter: '.formatV2Time'}" />
+
+			<Label design="Bold" text="Timestamp (Edm.DateTimeOffset)" />
+			<DateTimePicker value="{
+				path: '/V2/Timestamp',
+				type: 'sap.ui.model.odata.type.DateTimeOffset'
+			}" showCurrentDateButton="true" showCurrentTimeButton="true" />
+			<Label text="Model Value" />
+			<Text text="{path: '/V2/Timestamp', formatter: '.formatV2Timestamp'}" />
+
+			<Label design="Bold" text="Timestamp in Timezone" />
+			<Input value="{
+				formatOptions: {showTimezone: false},
+				parts : [
+					{
+						path : '/V2/TimestampTZ',
+						parameters : {useUndefinedIfUnresolved : true},
+						type : 'sap.ui.model.odata.type.DateTimeOffset'
+					},
+					'/Timezone'
+				],
+				type : 'sap.ui.model.odata.type.DateTimeWithTimezone'
+			}"/>
+			<Input value="{
+				formatOptions: {showDate: false, showTime: false},
+				parts : [
+					{value: null},
+					'/Timezone'
+				],
+				type : 'sap.ui.model.odata.type.DateTimeWithTimezone'
+			}"/>
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V2TimeStampWithTimezone')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Value" />
+			<Text text="{path: '/V2/TimestampTZ', formatter: '.formatV2Date'}" />
+			<Text text="{/Timezone}" />
+
+
+			<core:Title level="H2" text="OData V4" />
+			<Label design="Bold" text="Date (Edm.Date)" />
+			<DatePicker value="{
+				path: '/V4/Date',
+				type: 'sap.ui.model.odata.type.Date'
+			}" showCurrentDateButton="true" />
+			<Label text="Model Value" />
+			<Text text="{/V4/Date}" />
+
+			<Label design="Bold" text="Time (Edm.TimeOfDay)" />
+			<TimePicker value="{
+				constraints: {precision: 3},
+				path: '/V4/Time',
+				type: 'sap.ui.model.odata.type.TimeOfDay'
+			}" showCurrentTimeButton="true" />
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V4TimePicker')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Value" />
+			<Text text="{/V4/Time}" />
+			<Label design="Bold" text="Timestamp (Edm.DateTimeOffset)" />
+			<DateTimePicker value="{
+				constraints: {precision: 3, V4: true},
+				path: '/V4/Timestamp',
+				type: 'sap.ui.model.odata.type.DateTimeOffset'
+			}" showCurrentDateButton="true" showCurrentTimeButton="true" />
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V4DateTimePicker')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Value" />
+			<Text text="{/V4/Timestamp}" />
+
+			<Label design="Bold" text="Timestamp in Timezone" />
+			<Input value="{
+				formatOptions: {showTimezone: false},
+				parts : [
+					{
+						constraints: {V4: true},
+						path : '/V4/TimestampTZ',
+						parameters : {useUndefinedIfUnresolved : true},
+						type : 'sap.ui.model.odata.type.DateTimeOffset'
+					},
+					'/Timezone'
+				],
+				type : 'sap.ui.model.odata.type.DateTimeWithTimezone'
+			}"/>
+			<Input value="{
+				formatOptions: {showDate: false, showTime: false},
+				parts : [
+					{value: null},
+					'/Timezone'
+				],
+				type : 'sap.ui.model.odata.type.DateTimeWithTimezone'
+			}"/>
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V4TimeStampWithTimezone')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Value" />
+			<Text text="{/V4/TimestampTZ}" />
+			<Text text="{/Timezone}" />
+		</form:SimpleForm>
+	</Panel>
+<!-- ************************************************************************************************************* -->
+	<Panel backgroundDesign="Solid" expandable="true" headerText="Other related controls" width="auto" class="sapUiResponsiveMargin">
+		<form:SimpleForm backgroundDesign="Transparent"	columnsM="2" columnsL="2" columnsXL="2"
+				editable="true" labelSpanM="3" layout="ResponsiveGridLayout">
+			<core:Title level="H2" text="sap.m.DateRangeSelection" />
+			<Label design="Bold" text="OData V2"/>
+			<DateRangeSelection value="{
+					formatOptions : {UTC : true},
+					parts : [{
+						constraints : {displayFormat : 'Date'},
+						path : '/V2/Date1',
+						type : 'sap.ui.model.odata.type.DateTime'
+					}, {
+						constraints : {displayFormat : 'Date'},
+						path : '/V2/Date2',
+						type : 'sap.ui.model.odata.type.DateTime'
+					}],
+					type : 'sap.ui.model.type.DateInterval'
+				}" displayFormat="medium" showCurrentDateButton="true" width="100%"/>
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V2DateRangeSelection')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Values" />
+			<Text text="{path: '/V2/Date1', formatter: '.formatV2Date'}" />
+			<Text text="{path: '/V2/Date2', formatter: '.formatV2Date'}" />
+
+			<Label design="Bold" text="OData V4"/>
+			<DateRangeSelection value="{
+					formatOptions : {UTC : true},
+					parts : [{
+						path : '/V4/Date1',
+						type : 'sap.ui.model.odata.type.Date'
+					}, {
+						path : '/V4/Date2',
+						type : 'sap.ui.model.odata.type.Date'
+					}],
+					type : 'sap.ui.model.type.DateInterval'
+				}" displayFormat="medium" showCurrentDateButton="true" width="100%"/>
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('V4DateRangeSelection')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Model Values" />
+			<Text text="{path: '/V4/Date1', formatter: '.formatV4Date'}" />
+			<Text text="{path: '/V4/Date2', formatter: '.formatV4Date'}" />
+
+			<core:Title level="H2" text="sap.m.DynamicDateRange" />
+			<Label text="DynamicDateRange" />
+			<DynamicDateRange id="DynamicDateRange" change="onChange" width="100%"/>
+			<Button icon="sap-icon://syntax" tooltip="Code Sample" press=".showCodeSample('DynamicDateRange')">
+				<layoutData><layout:GridData span="XL1 L1 M1 S1" /></layoutData>
+			</Button>
+			<Label text="Results" />
+			<Text text="{/Dates/0}" />
+			<Text text="{/Dates/1}" />
+
+			<core:Title level="H2" text="Relative Parsing/Formatting Considers the Configured Time Zone" />
+			<Label design="Bold" text="Timestamp" />
+			<Input value="{
+				constraints: {precision: 3, V4: true},
+				path: '/V4/Timestamp',
+				type: 'sap.ui.model.odata.type.DateTimeOffset'
+			}" />
+			<Label design="Bold" text="Relative Timestamp" />
+			<Input value="{
+				formatOptions : {relative : true},
+				constraints: {precision: 3, V4: true},
+				path: '/V4/Timestamp',
+				type: 'sap.ui.model.odata.type.DateTimeOffset'
+			}" />
+			<Label text="Model Value" />
+			<Text text="{/V4/Timestamp}" />
+	</form:SimpleForm>
+	</Panel>
+	<Panel expandable="true" headerText="Code samples how to use UI5Date" width="auto" class="sapUiResponsiveMargin">
+		<code:CodeEditor editable="false" value="{/SampleCode/UI5Date}" maxLines="30" height="auto"/>
+	</Panel>
+	</VBox>
+		<Dialog id="CodeExample" resizable="true" title="Code Example">
+			<code:CodeEditor id="Code" editable="false" maxLines="30" width="80em" height="auto"/>
+			<endButton>
+				<Button text="Close" press=".onCloseExample" />
+			</endButton>
+		</Dialog>
+</Page>
+</App>
+</mvc:View>
+		</script>
+
+	<script>
+		// some timezones for sap-timezone / sap-ui-timezone parameter
+		//  Pacific/Honolulu   (-10:00)
+		//  America/New_York   (-04:00/-05:00)
+		//  Etc/UTC            (+00:00)
+		//  Europe/Berlin      (+01:00/+02:00)
+		//  Pacific/Kiritimati (+14:00)
+
+sap.ui.require([
+	"sap/m/DynamicDateRange",
+	"sap/ui/core/Configuration",
+	"sap/ui/core/date/UI5Date",
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/model/json/JSONModel"
+], function (DynamicDateRange, Configuration, UI5Date, Controller, JSONModel) {
+	"use strict";
+	Controller.extend("myController", {
+		onInit: function () {
+			var oView = this.getView();
+
+			sap.ui.getCore().getMessageManager().registerObject(oView, true);
+			oView.setModel(new JSONModel({
+				// time zone configuration
+				ConfiguredTimezone: Configuration.getTimezone(),
+				CurrentTimestamp: UI5Date.getInstance().toString(),
+				Timezone: "Europe/Berlin",
+				// as represented in OData V2
+				V2: {
+					Date: new Date("2023-07-06T00:00:00Z"),
+					Date1: null,
+					Date2: null,
+					Time: {
+						ms: ((15 * 60 + 30) * 60 + 45) * 1000,
+						__edmType : 'Edm.Time'
+					},
+					Timestamp: new Date("2023-07-06T09:35:00Z"),
+					// Timestamp1: new Date("2023-01-01T00:00:00Z"),
+					// Timestamp2: new Date("2023-12-31T23:59:59Z"),
+					TimestampTZ: UI5Date.getInstance("2023-07-06T09:35:00Z")
+				},
+				// as represented in OData V4
+				V4: {
+					Date: "2023-07-06",
+					Date1: null,
+					Date2: null,
+					Time: "15:30:45.000",
+					Timestamp: "2023-07-06T09:35:00.000Z",
+					// Timestamp1: "2023-01-01T00:00:00Z",
+					// Timestamp2: "2023-12-31T23:59:59Z",
+					TimestampTZ: "2023-07-06T09:35:00Z"
+				},
+				// for DynamicDateRange results
+				Dates: [],
+				// for relative parsing
+				Timestamp: null,
+				// ----------
+				JSDate: new Date(),
+				SampleCode: {
+					UI5Date: "// create a new Date/UI5Date instance:\n"
+						+ "var oDate = UI5Date.getInstance();\n"
+						+ "// Replace all occurences of new Date(...) with UI5Date.getInstance(...) to be prepared for configured time zones\n"
+						+ "// if configured and local time zones are the same, oDate is a pure JavaScript Date\n"
+						+ "// if configured and local time zones differ oDate is a UI5Date instance which is a subclass of Date\n"
+						+ "\n"
+						+ "var iHours = oDate.getHours(); // gets the hours of the timestamp in the configured time zone\n"
+						+ "\n"
+						+ "oDate.setHours(23, 59, 59, 999); // sets the time part of the timestamp to the end of the day in the configured time zone\n"
+						+ "\n"
+						+ "// set a specific date in the configured time zone\n"
+						+ "var oDate2 = UI5Date.getInstance(2023, 0, 4); // Jan 4th 2023 in configured time zone\n"
+						+ "\n"
+						+ "var iDay = oDateFormatter.parse(\"2022-01-03\").getDate(); // always returns 3 as the formatter returns a Date considering the configured time zone\n"
+						+ "\n"
+						+ "// Use DynamicDateRange.toDates(...) to convert the selected date range into Date objects that consider the configured time zone\n"
+						+ "Controller.extend(\"myController\", {\n"
+						+ "\tonChange: function(oEvent) {\n"
+						+ "\t\tvar oValue = oEvent.getParameter(\"value\"),\n"
+						+ "\t\t\taDates = DynamicDateRange.toDates(oValue); // returns start and end date (JS Date or UI5Date) in the configured time zone\n"
+						+ "\t\t//...\n"
+						+ "\t}\n"
+						+ "});\n"
+						+ "\n",
+					V2DatePicker: "<!-- Model value is a Javascript Date object in UTC as it is in OData V2 -->\n"
+						+ "<DatePicker value=\"{\n\t\tconstraints : {displayFormat : 'Date'},\n\t\tpath : '/V2/Date',\n\t\ttype : 'sap.ui.model.odata.type.DateTime'\n\t}\" />\n\n\n",
+					V2DateRangeSelection: "<!-- Date1 and Date2 are Edm.Date properties -->\n"
+						+ "<DateRangeSelection value=\"{\n"
+						+ "\tformatOptions: {UTC: true}, \n"
+						+ "\tparts: [\n"
+						+ "\t\t{constraints: {displayFormat: 'Date'}, path: '/V2/Date1', type: 'sap.ui.model.odata.type.DateTime'},\n"
+						+ "\t\t{constraints: {displayFormat: 'Date'}, path: '/V2/Date2', type: 'sap.ui.model.odata.type.DateTime'}\n"
+						+ "\t], \n"
+						+ "\ttype: 'sap.ui.model.type.DateInterval'\n"
+						+ "}\" />\n\n\n",
+					V2TimeStampWithTimezone: "<!-- Date time with time zone consists of multiple parts -->\n"
+						+ "<Input value='{\n"
+						+ "	formatOptions: {showTimezone: false},\n"
+						+ "	parts : [\n"
+						+ "		{\n"
+						+ "			path : '/V2/TimestampTZ',\n"
+						+ "			parameters : {useUndefinedIfUnresolved : true},\n"
+						+ "			type : 'sap.ui.model.odata.type.DateTimeOffset'\n"
+						+ "		},\n"
+						+ "		'/Timezone'\n"
+						+ "	],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}'\n"
+						+ "/>",
+					V4DateRangeSelection: "<!-- The JSON model value for Date1 and Date2 are strings in the format yyyy-MM-dd as in the OData V4 model -->\n"
+						+ "<DateRangeSelection value=\"{\n"
+						+ "\tformatOptions: {UTC: true}, \n"
+						+ "\tparts: [\n"
+						+ "\t\t{path: 'json>/V4/Date1', type: 'sap.ui.model.odata.type.Date'},\n"
+						+ "\t\t{path: 'json>/V4/Date2', type: 'sap.ui.model.odata.type.Date'}\n"
+						+ "\t], \n"
+						+ "\ttype: 'sap.ui.model.type.DateInterval'\n"
+						+ "}\" />\n"
+						+ "\n"
+						+ "<!-- If an OData V4 model is used, the type is determined automatically -->\n"
+						+ "<DateRangeSelection value=\"{\n"
+						+ "\tformatOptions: {UTC: true}, \n"
+						+ "\tparts: ['/V4/Date1', '/V4/Date2'], \n"
+						+ "\ttype: 'sap.ui.model.type.DateInterval'\n"
+						+ "}\" />\n\n\n",
+					V4DateTimePicker: "<!-- The JSON model value is a string in the format hh:mm:ss.SSS as in the OData V4 model -->\n"
+						+ "<DateTimePicker value=\"{\n\t\tconstraints: {precision: 3, V4: true},\n\t\tpath: 'json>/V4/Timestamp',\n\t\ttype: 'sap.ui.model.odata.type.DateTimeOffset'\n\t}\" />\n"
+						+ "\n"
+						+ "<!-- If an OData V4 model is used, the type is determined automatically -->\n"
+						+ "<TimePicker value=\"{/V4/DateTimeOffset}\"/>\n\n\n",
+					V4TimePicker: "<!-- The JSON model value is a string in the format hh:mm:ss.SSS as in the OData V4 model -->\n"
+						+ "<TimePicker value=\"{\n\t\tconstraints: {precision: 3},\n\t\tpath: 'json>/V4/Time',\n\t\ttype: 'sap.ui.model.odata.type.TimeOfDay'\n\t}\" />\n"
+						+ "\n"
+						+ "<!-- If an OData V4 model is used, the type is determined automatically -->\n"
+						+ "<TimePicker value=\"{/V4/Time}\"/>\n\n\n",
+					V4TimeStampWithTimezone: "<!-- Similar to V2 but the type requires the V4 constraint in case of V4 -->\n"
+						+ "<Input value='{\n"
+						+ "	formatOptions: {showTimezone: false},\n"
+						+ "	parts : [\n"
+						+ "		{\n"
+						+ "			constraints: {V4: true},\n"
+						+ "			path : '/V2/TimestampTZ',\n"
+						+ "			parameters : {useUndefinedIfUnresolved : true},\n"
+						+ "			type : 'sap.ui.model.odata.type.DateTimeOffset'\n"
+						+ "		},\n"
+						+ "		'/Timezone'\n"
+						+ "	],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}'\n"
+						+ "/>",
+					DynamicDateRange: "<!-- Is a mighty, but special control! -->\n"
+						+ "<!-- I cannot be bound to a model property, i.e. inserting and extracting values from the control has to happen programmatically -->\n\n"
+						+ "<!-- Implementing the control requires to attach a method to the change event of the control -->\n"
+						+ "<DynamicDateRange id='DynamicDateRange' change='onChange' width='100%'/>\n\n"
+						+ "<!-- The change event handler, handles the functionallity which is usually handled by the property binding of any other control -->\n"
+						+ "onChange: function(oEvent) {\n"
+						+ "	var oDynamicDateRange = oEvent.oSource,\n"
+						+ "		oModel = this.getView().getModel(),\n"
+						+ " 	bValid = oEvent.getParameter('valid');\n\n"
+						+ "	if (bValid) {\n"
+						+ "		var aDates = DynamicDateRange.toDates(oEvent.getParameter('value'));\n"
+						+ "		oModel.setProperty('/Dates', aDates);\n"
+						+ "		oDynamicDateRange.setValueState(ValueState.None);\n"
+						+ "	} else {\n"
+						+ "		oDynamicDateRange.setValueState(ValueState.Error);\n"
+						+ "	}\n"
+						+ "}"
+				},
+				selectedDates: [],
+				UI5Date: UI5Date.getInstance(),
+			}));
+		},
+		formatV2Date: function (vValue) {
+			return vValue ? vValue.toUTCString() : "null";
+		},
+		formatV4Date: function (vValue) {
+			return "" + vValue;
+		},
+		formatV2Time: function (vValue) {
+			return vValue ? JSON.stringify(vValue) : "null";
+		},
+		formatV2Timestamp: function (vValue) {
+			return vValue ? vValue.toString() : "null";
+		},
+		onChange: function(oEvent) {
+			var oDynamicDateRange = oEvent.oSource,
+				oModel = this.getView().getModel(),
+				bValid = oEvent.getParameter("valid");
+
+			if (bValid) {
+				var aDates = DynamicDateRange.toDates(oEvent.getParameter("value"));
+				oModel.setProperty("/Dates", aDates);
+				oDynamicDateRange.setValueState(ValueState.None);
+			} else {
+				oDynamicDateRange.setValueState(ValueState.Error);
+			}
+		},
+		onCloseExample: function () {
+			this.byId("CodeExample").close();
+		},
+		showCodeSample: function(sKey) {
+			var oDialog = this.byId("CodeExample"),
+				oCodeEditor = this.byId("Code"),
+				sValue = this.getView().getModel().getProperty("/SampleCode/" + sKey);
+
+			oCodeEditor.setValue(sValue);
+			oDialog.open();
+		}
+	});
+
+	sap.ui.xmlview({viewContent: jQuery('#myXml').html()}).placeAt("content");
+});
+	</script>
+
+</head>
+
+<body id='content' class='sapUiBody'>
+</body>
+
+</html>
