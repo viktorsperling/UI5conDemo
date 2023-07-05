@@ -45,7 +45,7 @@
 			<TimePicker value="{
 				path: '/V2/Time',
 				type: 'sap.ui.model.odata.type.Time'
-			}" showCurrentTimeButton="true" />			
+			}" showCurrentTimeButton="true" />
 			<Label text="Model Value" />
 			<Text text="{path: '/V2/Time', formatter: '.formatV2Time'}" />
 
@@ -221,9 +221,6 @@
 			<Text text="{/V4/Timestamp}" />
 	</form:SimpleForm>
 	</Panel>
-	<Panel expandable="true" headerText="Code samples how to use UI5Date" width="auto" class="sapUiResponsiveMargin">
-		<code:CodeEditor editable="false" value="{/SampleCode/UI5Date}" maxLines="30" height="auto"/>
-	</Panel>
 	</VBox>
 		<Dialog id="CodeExample" resizable="true" title="Code Example">
 			<code:CodeEditor id="Code" editable="false" maxLines="30" width="80em" height="auto"/>
@@ -294,30 +291,6 @@ sap.ui.require([
 				// ----------
 				JSDate: new Date(),
 				SampleCode: {
-					UI5Date: "// create a new Date/UI5Date instance:\n"
-						+ "var oDate = UI5Date.getInstance();\n"
-						+ "// Replace all occurences of new Date(...) with UI5Date.getInstance(...) to be prepared for configured time zones\n"
-						+ "// if configured and local time zones are the same, oDate is a pure JavaScript Date\n"
-						+ "// if configured and local time zones differ oDate is a UI5Date instance which is a subclass of Date\n"
-						+ "\n"
-						+ "var iHours = oDate.getHours(); // gets the hours of the timestamp in the configured time zone\n"
-						+ "\n"
-						+ "oDate.setHours(23, 59, 59, 999); // sets the time part of the timestamp to the end of the day in the configured time zone\n"
-						+ "\n"
-						+ "// set a specific date in the configured time zone\n"
-						+ "var oDate2 = UI5Date.getInstance(2023, 0, 4); // Jan 4th 2023 in configured time zone\n"
-						+ "\n"
-						+ "var iDay = oDateFormatter.parse(\"2022-01-03\").getDate(); // always returns 3 as the formatter returns a Date considering the configured time zone\n"
-						+ "\n"
-						+ "// Use DynamicDateRange.toDates(...) to convert the selected date range into Date objects that consider the configured time zone\n"
-						+ "Controller.extend(\"myController\", {\n"
-						+ "\tonChange: function(oEvent) {\n"
-						+ "\t\tvar oValue = oEvent.getParameter(\"value\"),\n"
-						+ "\t\t\taDates = DynamicDateRange.toDates(oValue); // returns start and end date (JS Date or UI5Date) in the configured time zone\n"
-						+ "\t\t//...\n"
-						+ "\t}\n"
-						+ "});\n"
-						+ "\n",
 					V2DatePicker: "<!-- Model value is a Javascript Date object in UTC as it is in OData V2 -->\n"
 						+ "<DatePicker value=\"{\n\t\tconstraints : {displayFormat : 'Date'},\n\t\tpath : '/V2/Date',\n\t\ttype : 'sap.ui.model.odata.type.DateTime'\n\t}\" />\n\n\n",
 					V2DateRangeSelection: "<!-- Date1 and Date2 are Edm.Date properties -->\n"
