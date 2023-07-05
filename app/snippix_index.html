@@ -125,7 +125,6 @@
 					{
 						constraints: {V4: true},
 						path : '/V4/TimestampTZ',
-						parameters : {useUndefinedIfUnresolved : true},
 						type : 'sap.ui.model.odata.type.DateTimeOffset'
 					},
 					'/Timezone'
@@ -222,12 +221,12 @@
 	</form:SimpleForm>
 	</Panel>
 	</VBox>
-		<Dialog id="CodeExample" resizable="true" title="Code Example">
-			<code:CodeEditor id="Code" editable="false" maxLines="30" width="80em" height="auto"/>
-			<endButton>
-				<Button text="Close" press=".onCloseExample" />
-			</endButton>
-		</Dialog>
+	<Dialog id="CodeExample" resizable="true" title="Code Example">
+		<code:CodeEditor id="Code" editable="false" maxLines="30" width="80em" height="auto"/>
+		<endButton>
+			<Button text="Close" press=".onCloseExample" />
+		</endButton>
+	</Dialog>
 </Page>
 </App>
 </mvc:View>
@@ -303,7 +302,7 @@ sap.ui.require([
 						+ "\ttype: 'sap.ui.model.type.DateInterval'\n"
 						+ "}\" />\n\n\n",
 					V2TimeStampWithTimezone: "<!-- Date time with time zone consists of multiple parts -->\n"
-						+ "<Input value='{\n"
+						+ "<Input value=\"{\n"
 						+ "	formatOptions: {showTimezone: false},\n"
 						+ "	parts : [\n"
 						+ "		{\n"
@@ -314,7 +313,20 @@ sap.ui.require([
 						+ "		'/Timezone'\n"
 						+ "	],\n"
 						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
-						+ "}'\n"
+						+ "}\"\n"
+						+ "/>\n\n"
+						+ "<Input value=\"{\n"
+						+ "	formatOptions: {showDate : false, showTime : false},\n"
+						+ "	parts : [\n"
+						+ "		{\n"
+						+ "			path : '/V2/TimestampTZ',\n"
+						+ "			parameters : {useUndefinedIfUnresolved : true},\n"
+						+ "			type : 'sap.ui.model.odata.type.DateTimeOffset'\n"
+						+ "		},\n"
+						+ "		'/Timezone'\n"
+						+ "	],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}\"\n"
 						+ "/>",
 					V4DateRangeSelection: "<!-- The JSON model value for Date1 and Date2 are strings in the format yyyy-MM-dd as in the OData V4 model -->\n"
 						+ "<DateRangeSelection value=\"{\n"
@@ -342,33 +354,59 @@ sap.ui.require([
 						+ "\n"
 						+ "<!-- If an OData V4 model is used, the type is determined automatically -->\n"
 						+ "<TimePicker value=\"{/V4/Time}\"/>\n\n\n",
-					V4TimeStampWithTimezone: "<!-- Similar to V2 but the type requires the V4 constraint in case of V4 -->\n"
-						+ "<Input value='{\n"
+					V4TimeStampWithTimezone: "<!-- Date time with time zone consists of multiple parts -->\n"
+						+ "<Input value=\"{\n"
 						+ "	formatOptions: {showTimezone: false},\n"
 						+ "	parts : [\n"
 						+ "		{\n"
 						+ "			constraints: {V4: true},\n"
-						+ "			path : '/V2/TimestampTZ',\n"
-						+ "			parameters : {useUndefinedIfUnresolved : true},\n"
+						+ "			path : '/V4/TimestampTZ',\n"
 						+ "			type : 'sap.ui.model.odata.type.DateTimeOffset'\n"
 						+ "		},\n"
 						+ "		'/Timezone'\n"
 						+ "	],\n"
 						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
-						+ "}'\n"
-						+ "/>",
-					DynamicDateRange: "<!-- Is a mighty, but special control! -->\n"
-						+ "<!-- I cannot be bound to a model property, i.e. inserting and extracting values from the control has to happen programmatically -->\n\n"
+						+ "}\"\n"
+						+ "/>\n"
+						+ "<Input value=\"{\n"
+						+ "	formatOptions: {showDate: false, showTime: false},\n"
+						+ "	parts : [\n"
+						+ "		{\n"
+						+ "			constraints: {V4: true},\n"
+						+ "			path : '/V4/TimestampTZ',\n"
+						+ "			type : 'sap.ui.model.odata.type.DateTimeOffset'\n"
+						+ "		},\n"
+						+ "		'/Timezone'\n"
+						+ "	],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}\"\n"
+						+ "/>\n\n"
+						+ "<!-- If an OData V4 model is used, the type is determined automatically -->\n"
+						+ "<Input value=\"{\n"
+						+ "	formatOptions: {showTimezone: false},\n"
+						+ "	parts : ['/V4/TimestampTZ', '/Timezone'],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}\"\n"
+						+ "/>\n"
+						+ "<Input value=\"{\n"
+						+ "	formatOptions: {showDate: false, showTime: false},\n"
+						+ "	parts : ['/V4/TimestampTZ', '/Timezone'],\n"
+						+ "	type : 'sap.ui.model.odata.type.DateTimeWithTimezone'\n"
+						+ "}\"\n"
+						+ "/>\n",
+						DynamicDateRange: "<!-- Is a mighty, but special control! -->\n"
+						+ "<!-- It cannot be bound to a model property, i.e. inserting and extracting values from the control has to happen programmatically -->\n\n"
 						+ "<!-- Implementing the control requires to attach a method to the change event of the control -->\n"
-						+ "<DynamicDateRange id='DynamicDateRange' change='onChange' width='100%'/>\n\n"
-						+ "<!-- The change event handler, handles the functionallity which is usually handled by the property binding of any other control -->\n"
-						+ "onChange: function(oEvent) {\n"
+						+ "<DynamicDateRange id=\"DynamicDateRange\" change=\"onChange\" width=\"100%\"/>\n\n"
+						+ "// The change event handler, handles the functionallity which is usually handled by the property binding of any other control\n"
+						+ "onChange: function (oEvent) {\n"
 						+ "	var oDynamicDateRange = oEvent.oSource,\n"
 						+ "		oModel = this.getView().getModel(),\n"
-						+ " 	bValid = oEvent.getParameter('valid');\n\n"
+						+ "		bValid = oEvent.getParameter(\"valid\");\n\n"
 						+ "	if (bValid) {\n"
-						+ "		var aDates = DynamicDateRange.toDates(oEvent.getParameter('value'));\n"
-						+ "		oModel.setProperty('/Dates', aDates);\n"
+						+ "		// get the timestamps for the selected range as Date objects considering the configured time zone\n"
+						+ "		var aDates = DynamicDateRange.toDates(oEvent.getParameter(\"value\"));\n"
+						+ "		oModel.setProperty(\"/Dates\", aDates);\n"
 						+ "		oDynamicDateRange.setValueState(ValueState.None);\n"
 						+ "	} else {\n"
 						+ "		oDynamicDateRange.setValueState(ValueState.Error);\n"
@@ -391,12 +429,13 @@ sap.ui.require([
 		formatV2Timestamp: function (vValue) {
 			return vValue ? vValue.toString() : "null";
 		},
-		onChange: function(oEvent) {
+		onChange: function (oEvent) {
 			var oDynamicDateRange = oEvent.oSource,
 				oModel = this.getView().getModel(),
 				bValid = oEvent.getParameter("valid");
 
 			if (bValid) {
+				// get the timestamps for the selected range as Date objects considering the configured time zone
 				var aDates = DynamicDateRange.toDates(oEvent.getParameter("value"));
 				oModel.setProperty("/Dates", aDates);
 				oDynamicDateRange.setValueState(ValueState.None);
