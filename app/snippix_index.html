@@ -243,10 +243,13 @@
 sap.ui.require([
 	"sap/m/DynamicDateRange",
 	"sap/ui/core/Configuration",
+	"sap/ui/core/library",
 	"sap/ui/core/date/UI5Date",
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel"
-], function (DynamicDateRange, Configuration, UI5Date, Controller, JSONModel) {
+], function (DynamicDateRange, Configuration, coreLibrary, UI5Date, Controller, JSONModel) {
+	// shortcut for sap.ui.core.ValueState
+	var ValueState = coreLibrary.ValueState;
 	"use strict";
 	Controller.extend("myController", {
 		onInit: function () {
